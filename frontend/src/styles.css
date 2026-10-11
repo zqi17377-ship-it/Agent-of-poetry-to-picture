@@ -5,3 +5,7 @@
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
 .basic-mode-note{display:block;margin-top:3px;color:#6d8084;font-size:10px;letter-spacing:0}
 @media(max-width:640px){.basic-mode-note{font-size:8px;max-width:155px}}
+.anchor-list {margin: 20px 0; border-left: 2px solid #c8d4d9; padding-left: 16px;}
+.anchor-list p {display: grid; gap: 5px; margin: 16px 0;}
+.anchor-list strong {font-weight: 500; color: #435b64;}
+.anchor-list small {color: #7c8589; line-height: 1.65; overflow-wrap: anywhere;}

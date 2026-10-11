@@ -3,11 +3,14 @@ from .basic import BasicTextProvider
 from .gemini import GeminiProvider
 from .hf_space import HuggingFaceSpaceProvider
 from .compatible import CompatibleProvider
+from .local_text import LocalTextProvider, LocalModelRuntime
 
 
 def create_providers(settings: Settings):
     gemini = GeminiProvider(settings.gemini_api_key, settings.gemini_text_model, settings.gemini_image_model)
-    if settings.text_provider == "basic":
+    if settings.text_provider == "local":
+        text = LocalTextProvider(LocalModelRuntime(settings.local_text_binary, settings.local_text_model))
+    elif settings.text_provider == "basic":
         text = BasicTextProvider()
     elif settings.text_provider == "gemini":
         text = gemini

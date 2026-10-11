@@ -11,7 +11,7 @@ revision = sys.argv[1]
 paths = subprocess.check_output(["git", "ls-tree", "-r", "--name-only", "-z", revision]).decode("utf-8").split("\0")
 elements = []
 for path in filter(None, paths):
-    if path == ".env" or path.startswith(("data/", ".venv/", ".tmp/")):
+    if path == ".env" or path.startswith(("data/", ".venv/", ".tmp/", "models/", "runtime/")):
         raise SystemExit("Refusing to export sensitive/generated runtime files")
     data = subprocess.check_output(["git", "show", revision + ":" + path])
     try:

@@ -4,19 +4,23 @@
 
 项目需要 Python 3.11+、Node.js 24+（前端回归测试使用 Node 原生 TypeScript 支持）。安装脚本优先使用本机 Codex 的 Python，没有时使用 PATH 中的 `python`。在项目目录双击 `安装依赖.cmd`，会创建 `.venv`、按锁文件安装 Python/前端依赖并构建网页。
 
+依赖安装后双击 `安装文学模型.cmd`。脚本下载固定版本官方 Qwen3-4B Q4_K_M（约 2.5GB）和 Windows x64 llama.cpp b10025 CPU 程序，校验 SHA256；中断可再次运行续传。文件保存在忽略的 `models/` 与 `runtime/llama/`。Windows x64 和建议 8GB 以上可用内存；本机已在 31GB 内存的 Ryzen 8845H 上调试。
+
 双击 `启动.cmd`，或执行 `.\.venv\Scripts\python.exe launch.py`。默认只监听本机 `127.0.0.1:8765`，随后自动打开浏览器。可用 `--no-browser` 不自动打开；端口被占用时先使用现有服务，或指定 `--port 8766`。
 
 关闭终端或按 Ctrl+C 停止。重新启动不会重复提交原来的运行中请求；这类任务会显示“需核查”。原本排队但尚未开始的任务会继续处理。
 
 ## 模型配置
 
-复制 `.env.example` 为 `.env`，用文本编辑器修改并重启服务。项目默认即为免费调试配置，不复制也能运行：
+复制 `.env.example` 为 `.env`，用文本编辑器修改并重启服务。项目默认即为免费调试配置，安装本机文学模型后，不复制也能运行：
 
 ```dotenv
 IMAGE_PROVIDER=hf_space
-TEXT_PROVIDER=basic
+TEXT_PROVIDER=local
 HF_SPACE_URL=https://black-forest-labs-flux-1-schnell.hf.space
 ```
+
+文学理解在首次任务时加载本机模型，可能需要一些时间。模型进程只监听随机本机端口，带临时认证，关闭应用时停止应用创建的模型进程。不会连接收费文字服务。缺少模型文件会提示安装，不能自动退回关键词草地。`TEXT_PROVIDER=basic` 仅保留基础关键词调试，不适合诗歌隐喻。可通过 `LOCAL_TEXT_BINARY`、`LOCAL_TEXT_MODEL` 覆盖本机文件路径。
 
 HF Space 是公共演示服务，没有应用自己的无限免费额度。排队、配额不足或服务暂停会提示失败；不会偷偷切换为收费模型。
 
@@ -46,7 +50,7 @@ GEMINI_IMAGE_MODEL=填写账号支持的图像模型
 
 调用记录统计请求次数和耗时，保存图像服务返回的 usage；没有提供 usage/金额时不推算为零费用。文字服务目前不累计 token 用量或金额。
 
-不要把 `.env`、`data` 或终端中手动填写的密钥提交到仓库。这些目录已有 Git 忽略规则。
+不要把 `.env`、`data` 或终端中手动填写的密钥提交到仓库。这些目录已有 Git 忽略规则；模型权重和运行程序也已忽略。
 
 ## 开发检查
 

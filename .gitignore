@@ -11,3 +11,6 @@ __pycache__/
 .tmp/
 *.tsbuildinfo
 docs/screenshots/
+models/
+runtime/
+*.gguf

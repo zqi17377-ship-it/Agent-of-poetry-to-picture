@@ -23,13 +23,17 @@ def create_app(settings=None, text_provider=None, image_provider=None, start_wor
 
     @asynccontextmanager
     async def lifespan(app):
-        if start_worker:
-            await worker.start()
         try:
+            if start_worker:
+                await worker.start()
             yield
         finally:
-            if start_worker:
-                await worker.stop()
+            try:
+                if start_worker:
+                    await worker.stop()
+            finally:
+                if hasattr(text_provider, "close"):
+                    await text_provider.close()
 
     app = FastAPI(title="余境 · 诗文意境图", lifespan=lifespan)
     app.state.repo, app.state.workflow = repo, workflow

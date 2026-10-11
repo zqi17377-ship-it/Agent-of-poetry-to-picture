@@ -41,7 +41,7 @@ class Workflow:
                 self.stage(job, "checking", self.vision is not None)
                 report = await assess_image(image, interpretation, brief, self.vision)
                 self.stage(job, "saving")
-                self.repo.save_version(job, image.data, {"interpretation": interpretation.model_dump(), "brief": brief.model_dump(), "prompt": prompt, "prompt_version": "1", "model": image.model, "text_mode": self.text_mode, "usage": image.usage, "quality_report": report.model_dump()})
+                self.repo.save_version(job, image.data, {"interpretation": interpretation.model_dump(), "brief": brief.model_dump(), "prompt": prompt, "prompt_version": "2-anchored", "model": image.model, "text_mode": self.text_mode, "usage": image.usage, "quality_report": report.model_dump()})
         except (SubmissionUncertain, TimeoutError):
             self.repo.update_job(job.id, status="needs_review", error="请求已提交或结果不明确，已停止自动重试。请核查生成服务记录后再重新生成。")
         except ProviderError as error:

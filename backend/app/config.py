@@ -10,7 +10,9 @@ ROOT = Path(__file__).resolve().parents[2]
 class Settings:
     data_dir: Path = ROOT / "data"
     image_provider: str = "hf_space"
-    text_provider: str = "basic"
+    text_provider: str = "local"
+    local_text_binary: Path = ROOT / "runtime" / "llama" / "llama-server.exe"
+    local_text_model: Path = ROOT / "models" / "Qwen3-4B-Q4_K_M.gguf"
     hf_space_url: str = "https://black-forest-labs-flux-1-schnell.hf.space"
     hf_token: str = ""
     gemini_api_key: str = ""
@@ -31,7 +33,7 @@ class Settings:
         for name in cls.__dataclass_fields__:
             value = os.getenv(name.upper())
             if value is not None:
-                setattr(result, name, Path(value).resolve() if name == "data_dir" else value.strip())
-        if result.image_provider not in {"hf_space", "gemini", "compatible"} or result.text_provider not in {"basic", "gemini", "compatible"}:
+                setattr(result, name, Path(value).resolve() if name in {"data_dir", "local_text_binary", "local_text_model"} else value.strip())
+        if result.image_provider not in {"hf_space", "gemini", "compatible"} or result.text_provider not in {"local", "basic", "gemini", "compatible"}:
             raise ValueError("不支持的模型配置，请查看 .env.example。")
         return result

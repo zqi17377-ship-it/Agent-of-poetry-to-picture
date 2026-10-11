@@ -1,6 +1,7 @@
 """An explicit, limited keyword fallback, not a language model."""
 import json
 import re
+from .base import ProviderError
 
 SCENES = [
     ("snow-covered landscape", ["snow", "winter", "雪", "冬"]),
@@ -33,12 +34,14 @@ class BasicTextProvider:
                 if quote:
                     imagery.append({"image": image, "source_quote": quote})
             emotions = [name for name, words in MOODS if matched_quote(content, words)]
+            if not imagery:
+                raise ProviderError("基础解析器无法理解这段诗的意象，请启用本机语言模型或配置文字 API 后重试；尚未请求出图。")
             return {"language": "zh" if re.search(r"[\u4e00-\u9fff]", content) else "en", "emotions": emotions or ["平静（默认创作方向）"], "imagery": imagery, "ambiguities": ["当前使用基础关键词提取，无法可靠理解隐喻及复杂文学情绪；可接入语言模型提升理解。"]}
         payload = json.loads(content)
         if "current" in payload:
             # Preserve the brief; pass the user's visual instruction to the image model.
             result = dict(payload["current"])
-            result["composition"] += ". Requested visual adjustment: " + payload["revision"]
+            result["requested_adjustment"] = "\n".join(filter(None, [result.get("requested_adjustment", ""), payload["revision"]]))
             result["rationale"] = "保留已有画面描述，并将你的调整要求交给图像模型。"
             return result
         warm = "温暖" in payload.get("emotions", [])
@@ -54,4 +57,5 @@ class BasicTextProvider:
             "rendering": "natural landscape photography, believable textures, subtle depth, low-to-medium saturation",
             "additions": ["构图、光线和空间关系为创作补充；基础模式不能完整解读原文。"],
             "rationale": "根据原文可识别的意象安排画面，并采用自然写实的光线。当前为基础理解模式，可接入语言模型进一步理解诗意。",
+            "anchors": [{"source_quote": item["source_quote"], "visual_element": item["image"], "connection": "原文中直接出现的风景意象（基础关键词模式）"} for item in payload.get("imagery", [])],
         }

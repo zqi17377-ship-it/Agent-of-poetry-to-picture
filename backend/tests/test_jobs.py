@@ -126,3 +126,15 @@ def test_unexpected_failure_is_logged_without_provider_secrets(tmp_path, caplog)
     assert job_id in caplog.text and "RuntimeError" in caplog.text
     assert "private-api-key-do-not-log" not in caplog.text
     assert len(provider.requests) == 1
+
+
+def test_unrecognized_poem_preserves_text_and_makes_no_image_request(tmp_path):
+    repo = Repository(tmp_path)
+    text = "我如何用时光之羽，刻画在永恒之台阶上，爬上爬下的细节吗？"
+    artwork_id, job_id = repo.create_artwork(ArtworkInput(text=text))
+    provider = ImageFixture()
+    asyncio.run(Workflow(repo, BasicTextProvider(), provider).run(repo.claim()))
+    assert repo.get_job(job_id).status == "failed"
+    assert "语言模型" in repo.get_job(job_id).error
+    assert repo.get_artwork(artwork_id)["text"] == text
+    assert not provider.requests

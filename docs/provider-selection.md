@@ -8,7 +8,11 @@
 
 免费 Space 只承诺文生图。因此“修改”是依据新画面描述重新生成，不能保证局部编辑或构图保持。每次均保存新版本，原图不覆盖。
 
-文字理解默认 `basic`：本地中英文关键词匹配，无外部请求。它无法理解“雨已经停了”等否定/时序表达、完整隐喻或复杂作者意图；这限制了首版的文学理解质量。可独立更换为 Gemini 或兼容语言模型，不需要修改界面。
+文字理解默认 `local`：官方 [Qwen3-4B-GGUF](https://huggingface.co/Qwen/Qwen3-4B-GGUF) 的 Q4_K_M 文件，经官方 [llama.cpp server](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md) 在本机 CPU 提供结构化响应。两个请求分别理解文字和构思画面；图像仍由 FLUX 生成。安装脚本固定模型修订与 llama.cpp b10025 运行版本并校验 SHA256。结构化输出须使用有界且不接受未转义 JSON 引号的字符串模式；普通正则的无限匹配不适合直接作为生成语法。没有收费文字 API、权重微调或自动切换收费服务；默认模型能力仍有限，用户需核对解释和图片。
+
+旧 `basic` 为本地中英文关键词匹配，保留为调试接口。未识别到意象时现在会停止生成并提示接入语言模型，避免用任意草地代替原文。关键词模式仍不能可靠理解隐喻、否定或时序。所有新画面方案须保留提取的每个原文意象，画面元素直接加入提示词；界面可以展开查看对应依据。
+
+曾实际尝试官方公共 Qwen 文字演示，模型服务返回错误，因此未把不可靠演示设为默认。Hugging Face Inference Providers 当前免费账号没有每月包含额度，不能把其路由当作免费接口；详见[官方价格说明](https://huggingface.co/docs/inference-providers/pricing)。HF Token 只用于已有免费 Space 身份认证。
 
 备选 Gemini：实现结构化文字响应和参考图图像请求，测试覆盖请求格式、图片解码及错误处理；未创建账号，未真实调用付费 API。图像价格与模型可用性以 [官方价格说明](https://ai.google.dev/gemini-api/docs/pricing) 和 [图像生成文档](https://ai.google.dev/gemini-api/docs/image-generation) 为准。
 
