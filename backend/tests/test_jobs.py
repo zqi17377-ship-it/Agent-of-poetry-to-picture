@@ -116,3 +116,13 @@ def test_worker_lease_prevents_second_process_from_recovering_live_jobs(tmp_path
     assert repo.get_job(job_id).status == "running"
     repo.release_lease("worker-a")
     assert other.acquire_lease("worker-b")
+
+
+def test_unexpected_failure_is_logged_without_provider_secrets(tmp_path, caplog):
+    repo, _, job_id = setup_job(tmp_path)
+    provider = ImageFixture(RuntimeError("private-api-key-do-not-log"))
+    asyncio.run(Workflow(repo, BasicTextProvider(), provider).run(repo.claim()))
+    assert repo.get_job(job_id).status == "needs_review"
+    assert job_id in caplog.text and "RuntimeError" in caplog.text
+    assert "private-api-key-do-not-log" not in caplog.text
+    assert len(provider.requests) == 1

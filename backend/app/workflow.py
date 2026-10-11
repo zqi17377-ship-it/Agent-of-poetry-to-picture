@@ -1,10 +1,13 @@
 import asyncio
 import time
+import logging
 from pydantic import ValidationError
 from .literature import analyze_text, design_brief, build_prompt, revise_brief
 from .models import Interpretation, VisualBrief, GenerationRequest
 from .quality import assess_image
 from .providers.base import ProviderError, SubmissionUncertain
+
+logger = logging.getLogger(__name__)
 
 
 class Workflow:
@@ -48,7 +51,10 @@ class Workflow:
         except asyncio.CancelledError:
             self.repo.update_job(job.id, status="needs_review", error="运行已中断，原文和已有版本已保留。请核查后重新生成。")
             raise
-        except Exception:
+        except Exception as error:
+            # Exception messages may contain credentials or provider response
+            # bodies. Record the job and failure type, never raw provider data.
+            logger.error("Job %s failed unexpectedly (%s)", job.id, type(error).__name__)
             self.repo.update_job(job.id, status="needs_review", error="处理过程中出现异常，已保留任务。请查看运行日志并核查生成状态。")
         finally:
             self.repo.update_job(job.id, elapsed_ms=int((time.monotonic() - started) * 1000))

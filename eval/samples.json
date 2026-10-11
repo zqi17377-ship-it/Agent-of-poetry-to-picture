@@ -1,0 +1,17 @@
+{
+  "purpose": "Self-authored bilingual debugging fixtures; not quotations from published poems. Human aesthetic evaluation pending.",
+  "samples": [
+    {"id": "en-lake", "text": "The rain has left the lake. Under the grey sky, the water holds the silence of the shore.", "imagery": ["lake", "grey sky"], "mood": "quiet", "watch_for": "Rain has ended; avoid treating every weather keyword as present."},
+    {"id": "en-winter", "text": "I walk alone through the winter trees. The snow keeps the shape of every silence.", "imagery": ["snow", "trees"], "mood": "solitude", "watch_for": "Natural winter textures; avoid invented people unless useful."},
+    {"id": "en-warm", "text": "Warm sunlight rests on the grass. For a moment, the world asks for nothing.", "imagery": ["sunlight", "grass"], "mood": "warm calm", "watch_for": "Warm highlights must survive the cool default."},
+    {"id": "en-sea", "text": "The sea returns what I cannot name. Each wave folds a little distance into the shore.", "imagery": ["sea", "waves", "shore"], "mood": "longing", "watch_for": "Metaphor need not become literal objects."},
+    {"id": "en-city", "text": "An empty street receives the evening. One window still remembers the light.", "imagery": ["street", "window"], "mood": "quiet evening", "watch_for": "Keep plausible light and geometry."},
+    {"id": "en-abstract", "text": "Between yesterday and tomorrow, a small silence opens its hands.", "imagery": [], "mood": "ambiguous", "watch_for": "Acknowledge creative supplementation; no literal giant hands."},
+    {"id": "zh-lake", "text": "雨已经离开湖面。灰色天空下，水留住了岸边的沉默。", "imagery": ["湖", "灰色天空"], "mood": "平静", "watch_for": "雨已停；注意时间关系。"},
+    {"id": "zh-winter", "text": "我独自走过冬日的树林，雪替每一种沉默留下形状。", "imagery": ["冬", "树林", "雪"], "mood": "独处", "watch_for": "避免雪景塑料感。"},
+    {"id": "zh-warm", "text": "温暖的阳光停在草地上。那一刻，世界不再向我索取什么。", "imagery": ["阳光", "草地"], "mood": "温暖安宁", "watch_for": "不能强行变成蓝色阴郁画面。"},
+    {"id": "zh-sea", "text": "海把我无法命名的事物送回岸边，每一道浪都折叠了一点远方。", "imagery": ["海", "岸", "浪"], "mood": "思念", "watch_for": "保留多义性。"},
+    {"id": "zh-city", "text": "空街迎接黄昏，仍有一扇窗记得白天的光。", "imagery": ["街", "窗"], "mood": "宁静", "watch_for": "真实空间和黄昏光线。"},
+    {"id": "zh-abstract", "text": "在昨天与明天之间，一小片沉默张开了双手。", "imagery": [], "mood": "多义", "watch_for": "克制转译；补充内容应明确记录。"}
+  ]
+}

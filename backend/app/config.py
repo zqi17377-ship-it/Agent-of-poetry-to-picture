@@ -23,7 +23,6 @@ class Settings:
     image_api_key: str = ""
     image_model: str = ""
     image_allowed_hosts: str = ""
-    enable_quality: bool = False
 
     @classmethod
     def from_env(cls):
@@ -32,7 +31,7 @@ class Settings:
         for name in cls.__dataclass_fields__:
             value = os.getenv(name.upper())
             if value is not None:
-                setattr(result, name, Path(value).resolve() if name == "data_dir" else (value.lower() == "true" if name == "enable_quality" else value.strip()))
+                setattr(result, name, Path(value).resolve() if name == "data_dir" else value.strip())
         if result.image_provider not in {"hf_space", "gemini", "compatible"} or result.text_provider not in {"basic", "gemini", "compatible"}:
             raise ValueError("不支持的模型配置，请查看 .env.example。")
         return result
